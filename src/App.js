@@ -295,3 +295,118 @@ const App = () => {
     <div className="min-h-screen bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
       <div className="bg-slate-900/50 backdrop-blur-xl border-b border-amber-500/10">
         <div className="max-w-
+<div className="max-w-7xl mx-auto px-6 py-8">
+          <div className="flex items-center justify-between mb-4">
+            <div>
+              <h1 className="text-5xl font-bold bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent mb-3">Premium Vastgoed Spanje</h1>
+              <p className="text-slate-400 text-lg">Exclusieve investeringsmogelijkheden aan de Spaanse kust</p>
+            </div>
+            <button onClick={() => setIsAdminMode(!isAdminMode)} className={isAdminMode ? 'px-6 py-3 rounded-xl flex items-center gap-2 font-medium bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-900' : 'px-6 py-3 rounded-xl flex items-center gap-2 font-medium bg-slate-800/50 border border-amber-500/20 text-amber-200'}>
+              <Settings size={18} />{isAdminMode ? 'Admin Actief' : 'Admin'}
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div className="max-w-7xl mx-auto px-6 py-10">
+        <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
+          <div className="flex gap-3">
+            <button onClick={() => setFilterStatus('alle')} className={filterStatus === 'alle' ? 'px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-900' : 'px-6 py-3 rounded-xl font-medium bg-slate-800/50 border border-amber-500/20 text-amber-200'}>Alle ({properties.length})</button>
+            <button onClick={() => setFilterStatus('beschikbaar')} className={filterStatus === 'beschikbaar' ? 'px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-900' : 'px-6 py-3 rounded-xl font-medium bg-slate-800/50 border border-amber-500/20 text-amber-200'}>Beschikbaar ({properties.filter(p => calculateAvailability(p).available > 0).length})</button>
+            <button onClick={() => setFilterStatus('uitverkocht')} className={filterStatus === 'uitverkocht' ? 'px-6 py-3 rounded-xl font-medium bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-900' : 'px-6 py-3 rounded-xl font-medium bg-slate-800/50 border border-amber-500/20 text-amber-200'}>Uitverkocht ({properties.filter(p => calculateAvailability(p).available === 0).length})</button>
+          </div>
+          {isAdminMode && (
+            <button onClick={addNewProperty} className="px-6 py-3 bg-gradient-to-r from-emerald-500 to-teal-600 text-white rounded-xl flex items-center gap-2 font-bold"><Plus size={18} />Nieuw Project</button>
+          )}
+        </div>
+
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {filteredProperties.map((property) => {
+            const { available, percentageSold } = calculateAvailability(property);
+            const { monthsElapsed } = calculateSalesSpeed(property);
+            const urgency = getUrgencyStyle(available);
+
+            return (
+              <div key={property.id} className="bg-slate-900/50 backdrop-blur-xl border border-amber-500/20 rounded-2xl overflow-hidden shadow-2xl hover:shadow-amber-500/20 transition-all duration-500 group hover:scale-105">
+                <div className="relative h-72 overflow-hidden">
+                  <img src={property.images[0]} alt={property.title} className="w-full h-full object-cover group-hover:scale-110 transition duration-700" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-900 via-slate-900/20 to-transparent opacity-60"></div>
+                  
+                  <div className={'absolute top-5 right-5 bg-gradient-to-r text-white px-4 py-2 rounded-full text-sm font-bold shadow-lg ' + urgency.bg + (urgency.pulse ? ' animate-pulse' : '')}>
+                    {urgency.text}
+                  </div>
+                  
+                  {property.exclusive && (
+                    <div className="absolute top-5 left-5 bg-gradient-to-r from-amber-500 to-yellow-600 text-slate-900 px-4 py-2 rounded-full text-sm font-bold shadow-lg flex items-center gap-1">
+                      <Award size={14} />Exclusief
+                    </div>
+                  )}
+                  
+                  <div className="absolute bottom-5 left-5 right-5 bg-slate-900/80 backdrop-blur-md border border-amber-500/30 text-white px-4 py-3 rounded-xl">
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="flex items-center gap-2">
+                        <Home size={18} className="text-amber-400" />
+                        <span className="font-bold text-lg">{available}</span>
+                        <span className="text-slate-400 text-sm">/ {property.totalUnits}</span>
+                      </div>
+                      <span className="text-xs font-semibold text-amber-300">{percentageSold}% verkocht</span>
+                    </div>
+                    <div className="w-full bg-slate-700 rounded-full h-2 overflow-hidden">
+                      <div className="bg-gradient-to-r from-amber-400 to-yellow-500 h-full transition-all duration-500" style={{ width: percentageSold + '%' }}></div>
+                    </div>
+                  </div>
+
+                  {isAdminMode && (
+                    <div className="absolute top-5 left-5 flex gap-2">
+                      <button onClick={() => setEditingProperty(property)} className="bg-blue-600 hover:bg-blue-700 text-white p-3 rounded-xl"><Edit2 size={16} /></button>
+                      <button onClick={() => deleteProperty(property.id)} className="bg-red-600 hover:bg-red-700 text-white p-3 rounded-xl"><Trash2 size={16} /></button>
+                    </div>
+                  )}
+                </div>
+
+                <div className="p-6">
+                  <h3 className="text-2xl font-bold text-white mb-2 group-hover:text-amber-400 transition">{property.title}</h3>
+                  <p className="text-slate-400 mb-5 flex items-center gap-2"><MapPin size={16} className="text-amber-400" />{property.location}</p>
+
+                  <div className="bg-gradient-to-br from-amber-500/10 to-yellow-500/5 border border-amber-500/30 rounded-xl p-4 mb-5">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs text-amber-200/70 font-medium flex items-center gap-1"><Clock size={12} />Verkoopsnelheid</span>
+                      <span className="text-xs font-bold text-amber-300">{percentageSold}%</span>
+                    </div>
+                    <p className="text-xs text-slate-300">{percentageSold}% in {monthsElapsed} maand{monthsElapsed !== 1 ? 'en' : ''}</p>
+                  </div>
+
+                  <div className="grid grid-cols-2 gap-3 mb-5">
+                    <div className="bg-slate-800/30 rounded-lg p-3"><Maximize size={16} className="text-amber-400 mb-1" /><p className="text-white font-semibold">{property.m2} m²</p></div>
+                    <div className="bg-slate-800/30 rounded-lg p-3"><Bed size={16} className="text-amber-400 mb-1" /><p className="text-white font-semibold">{property.bedrooms} slk</p></div>
+                    <div className="bg-slate-800/30 rounded-lg p-3"><Calendar size={16} className="text-amber-400 mb-1" /><p className="text-white font-semibold text-sm">{property.deliveryDate}</p></div>
+                    <div className="bg-slate-800/30 rounded-lg p-3"><TrendingUp size={16} className="text-emerald-400 mb-1" /><p className="text-white font-semibold">{property.roi}% ROI</p></div>
+                  </div>
+
+                  <div className="border-t border-amber-500/20 pt-5 mb-5">
+                    <p className="text-3xl font-bold bg-gradient-to-r from-amber-200 to-yellow-500 bg-clip-text text-transparent">{formatPrice(property.price)}</p>
+                  </div>
+
+                  <button onClick={() => { setSelectedProperty(property); setViewMode('gallery'); setCurrentImageIndex(0); }} disabled={available === 0 && !isAdminMode} className={available === 0 && !isAdminMode ? 'w-full font-bold py-4 rounded-xl text-lg bg-slate-700 text-slate-500 cursor-not-allowed flex items-center justify-center gap-2' : 'w-full font-bold py-4 rounded-xl text-lg bg-gradient-to-r from-amber-500 to-yellow-600 hover:from-amber-400 hover:to-yellow-500 text-slate-900 shadow-lg hover:scale-105 transition flex items-center justify-center gap-2'}>
+                    <Eye size={20} />{available === 0 && !isAdminMode ? 'Uitverkocht' : 'Bekijk Virtuele Tour'}
+                  </button>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        {filteredProperties.length === 0 && (
+          <div className="text-center py-20">
+            <div className="bg-slate-900/50 backdrop-blur-xl border border-amber-500/20 rounded-2xl p-12 max-w-md mx-auto">
+              <p className="text-slate-300 text-xl font-medium">Geen projecten gevonden</p>
+              <p className="text-slate-500 mt-2">Probeer een ander filter</p>
+            </div>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+
+export default App;
