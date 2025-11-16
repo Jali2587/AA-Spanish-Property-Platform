@@ -1,0 +1,71 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+```
+
+4. Klik **"Commit new file"**
+
+---
+
+### Bestand 5: src/App.js
+
+1. Klik **"Add file"** → **"Create new file"**
+2. Typ als filename: `src/App.js`
+3. Plak de **complete App.js code** die ik eerder gaf (scroll terug of ik kan hem opnieuw geven)
+4. Klik **"Commit new file"**
+
+---
+
+## ✅ Stap 4: Controleer Je Structuur
+
+Je repository moet er nu zo uitzien:
+```
+📁 spanish-property-platform
+   📄 .gitignore         ✅
+   📄 README.md          ✅
+   📄 package.json       ✅
+   📁 public
+      📄 index.html      ✅
+   📁 src
+      📄 App.js          ✅
+      📄 index.css       ✅
+      📄 index.js        ✅
+```
+
+**Aantal bestanden/folders zichtbaar:**
+- 3 bestanden in root (.gitignore, README.md, package.json)
+- 2 folders (public, src)
+
+---
+
+## 🚀 Stap 5: Koppel aan Netlify
+
+1. Ga naar [netlify.com](https://netlify.com)
+2. Log in (of maak gratis account)
+3. Klik **"Add new site"** → **"Import an existing project"**
+4. Klik **"Deploy with GitHub"**
+5. Autoriseer Netlify (als je dit nog niet had gedaan)
+6. Selecteer je repository: `spanish-property-platform`
+7. Bij "Build settings":
+```
+   Build command:       npm run build
+   Publish directory:   build
+```
+8. Klik **"Deploy site"**
+
+⏳ Wacht 2-3 minuten...
+
+---
+
+## 🎉 Stap 6: Je Site is Live!
+
+Netlify geeft je een URL zoals:
+```
+https://random-name-123456.netlify.app
